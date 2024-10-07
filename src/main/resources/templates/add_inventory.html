@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Blood Inventory</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="jumbotron mt-5">
+        <h1 class="display-4">Welcome, <span th:text="${username}"></span>!</h1>
+        <p class="lead">This is your integrated dashboard for blood funds and equipment management.</p>
+        <hr class="my-4">
+        <p>Select an option below to get started:</p>
+        
+        <!-- Link to Manage Blood Inventory -->
+        <a class="btn btn-primary btn-lg" th:href="@{/inventory/list}" role="button">Manage Blood Inventory</a>
+        
+        <!-- Placeholder buttons for other features -->
+        <a class="btn btn-success btn-lg" th:href="@{/equipment/list}" role="button">Manage Equipment</a>
+        <a class="btn btn-warning btn-lg" th:href="@{/donations/list}" role="button">View Donations</a>
+        
+        <!-- Logout Button -->
+        <div class="mt-4">
+            <a class="btn btn-danger btn-lg" th:href="@{/logout}" role="button">Logout</a>
+        </div>
+    </div>
+    <h2 class="text-center">Add Blood Inventory</h2>
+    <form th:action="@{/inventory/save}" th:object="${bloodInventory}" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label for="bloodType">Blood Type:</label>
+            <input type="text" id="bloodType" class="form-control" th:field="*{bloodType}">
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" class="form-control" th:field="*{quantity}">
+        </div>
+        <div class="form-group">
+            <label for="expirationDate">Expiration Date:</label>
+            <input type="date" id="expirationDate" class="form-control" th:field="*{expirationDate}">
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+</body>
+</html>
