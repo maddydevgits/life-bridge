@@ -11,33 +11,47 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/inventory")
-public class LifeBridgeBloodInventoryController {
+public class BloodInventoryController {
 
     @Autowired
-    private LifeBridgeBloodInventoryRepository inventoryRepo;
+    private BloodInventoryRepository inventoryRepo;
 
     // List all blood inventory
     @GetMapping("/list")
     public String listInventory(HttpSession session,Model model) {
         String username = (String) session.getAttribute("username");
-        List<LifeBridgeBloodInventoryModel>inventoryList = inventoryRepo.findAll();
+        List<BloodInventoryModel>inventoryList = inventoryRepo.findAll();
         model.addAttribute("inventoryList", inventoryList);
         model.addAttribute("username", username);
         return "inventory_list";  // Corresponding Thymeleaf template to display the inventory
+    }
+
+    @GetMapping("/ulist")
+    public String ulistInventory(HttpSession session,Model model) {
+        String username = (String) session.getAttribute("username");
+        List<BloodInventoryModel>inventoryList = inventoryRepo.findAll();
+        model.addAttribute("inventoryList", inventoryList);
+        model.addAttribute("username", username);
+        return "uinventory_list";  // Corresponding Thymeleaf template to display the inventory
     }
 
     // Show form to add new blood inventory
     @GetMapping("/add")
     public String addInventoryForm(HttpSession session,Model model) {
         String username = (String) session.getAttribute("username");
-        model.addAttribute("bloodInventory", new LifeBridgeBloodInventoryModel());
+        model.addAttribute("bloodInventory", new BloodInventoryModel());
         model.addAttribute("username", username);
         return "add_inventory";  // Corresponding Thymeleaf template for the form
     }
 
     // Save new blood inventory
     @PostMapping("/save")
-    public String saveInventory(@ModelAttribute("bloodInventory") LifeBridgeBloodInventoryModel bloodInventory) {
+    public String saveInventory(HttpSession session,@ModelAttribute("bloodInventory") BloodInventoryModel bloodInventory) {
+        String name = (String) session.getAttribute("name");
+        String contact = (String) session.getAttribute("contact");
+
+        bloodInventory.setHospitalName(name);
+        bloodInventory.setHospitalNo(contact);
         inventoryRepo.save(bloodInventory);
         return "redirect:/inventory/list";
     }
@@ -53,7 +67,7 @@ public class LifeBridgeBloodInventoryController {
     @GetMapping("/update/{id}")
     public String updateInventoryForm(HttpSession session,@PathVariable("id") Long id, Model model) {
         String username = (String) session.getAttribute("username");
-        LifeBridgeBloodInventoryModel inventory = inventoryRepo.findById(id).orElse(null);
+        BloodInventoryModel inventory = inventoryRepo.findById(id).orElse(null);
         model.addAttribute("bloodInventory", inventory);
         model.addAttribute("username", username);
         return "update_inventory";  // Corresponding Thymeleaf template for the update form
@@ -61,7 +75,7 @@ public class LifeBridgeBloodInventoryController {
 
     // Save updated blood inventory
     @PostMapping("/update")
-    public String updateInventory(@ModelAttribute("bloodInventory") LifeBridgeBloodInventoryModel bloodInventory) {
+    public String updateInventory(@ModelAttribute("bloodInventory") BloodInventoryModel bloodInventory) {
         inventoryRepo.save(bloodInventory);
         return "redirect:/inventory/list";
     }

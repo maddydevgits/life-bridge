@@ -18,9 +18,18 @@
                 </div>
 
                 <form th:action="@{/registerForm}" method="post">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                    </div>
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username">
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Mobile</label>
+                        <input type="number" class="form-control" id="mobile" name="mobile" placeholder="Enter your mobile">
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>

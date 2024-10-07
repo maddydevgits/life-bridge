@@ -11,11 +11,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "blood_inventory")
-public class LifeBridgeBloodInventoryModel {
+public class BloodInventoryModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="hospital_name")
+    private String hospitalName;
+
+    @Column(name="contact_number")
+    private String hospitalNo;
 
     @Column(name = "blood_type")
     private String bloodType;
@@ -33,6 +39,22 @@ public class LifeBridgeBloodInventoryModel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getHospitalNo(){
+        return hospitalNo;
+    }
+
+    public void setHospitalNo(String hospitalNo){
+        this.hospitalNo=hospitalNo;
+    }
+
+    public String getHospitalName(){
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName){
+        this.hospitalName=hospitalName;
     }
 
     public String getBloodType() {

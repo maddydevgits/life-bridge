@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -40,6 +39,8 @@ public class LifeBridgeController {
         System.out.println("Password: " + model.getPassword());
         System.out.println("Email: " + model.getEmail());
         System.out.println("Role: "+ model.getRole());
+        System.out.println("Name: " + model.getName());
+        System.out.println("Mobile: " + model.getMobile());
 
         if (repo.existsByUsername(model.getUsername())) {
             form.addAttribute("message", "Username already exists. Please choose another username.");
@@ -72,6 +73,8 @@ public class LifeBridgeController {
             // Store username in the session
             session.setAttribute("username", user.get().getUsername());
             session.setAttribute("role",user.get().getRole());
+            session.setAttribute("name",user.get().getName());
+            session.setAttribute("contact",user.get().getMobile());
 
             form.addAttribute("message", "Login successful! Welcome " + user.get().getUsername());
 

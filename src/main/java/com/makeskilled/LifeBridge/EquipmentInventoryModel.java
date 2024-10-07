@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "equipment_inventory")
-public class LifeBridgeEquipmentInventoryModel {
+public class EquipmentInventoryModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,9 @@ public class LifeBridgeEquipmentInventoryModel {
     private Date purchaseDate;
 
     // Constructors, Getters, Setters
-    public LifeBridgeEquipmentInventoryModel() {}
+    public EquipmentInventoryModel() {}
 
-    public LifeBridgeEquipmentInventoryModel(String equipmentName, int quantity, Date purchaseDate) {
+    public EquipmentInventoryModel(String equipmentName, int quantity, Date purchaseDate) {
         this.equipmentName = equipmentName;
         this.quantity = quantity;
         this.purchaseDate = purchaseDate;

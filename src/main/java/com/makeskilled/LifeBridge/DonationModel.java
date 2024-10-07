@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "donations")
-public class LifeBridgeDonationModel {
+public class DonationModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class LifeBridgeDonationModel {
     private Date donationDate;
 
     // Constructors, Getters, Setters
-    public LifeBridgeDonationModel() {}
+    public DonationModel() {}
 
-    public LifeBridgeDonationModel(String donorName, String donationType, double amount, Date donationDate) {
+    public DonationModel(String donorName, String donationType, double amount, Date donationDate) {
         this.donorName = donorName;
         this.donationType = donationType;
         this.amount = amount;

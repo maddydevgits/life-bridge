@@ -13,17 +13,17 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/donations")
-public class LifeBridgeDonationController {
+public class DonationController {
 
     @Autowired
-    private LifeBridgeDonationRepository donationRepo;
+    private DonationRepository donationRepo;
 
     // List all donations
     @GetMapping("/list")
     public String listDonations(HttpSession session,Model model) {
         String username = (String) session.getAttribute("username");
         model.addAttribute("username", username);
-        List<LifeBridgeDonationModel> donationList = donationRepo.findAll();
+        List<DonationModel> donationList = donationRepo.findAll();
         model.addAttribute("donationList", donationList);
         return "donations_list";  // Corresponding Thymeleaf template to display the donations
     }
