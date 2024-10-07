@@ -69,6 +69,7 @@ public class LifeBridgeController {
         if (user.isPresent() && user.get().getPassword().equals(model.getPassword())) {
             // Store username in the session
             session.setAttribute("username", user.get().getUsername());
+            session.setAttribute("role",user.get().getRole());
 
             form.addAttribute("message", "Login successful! Welcome " + user.get().getUsername());
             return "redirect:/dashboard";  
@@ -82,6 +83,7 @@ public class LifeBridgeController {
     public String dashboard(HttpSession session, Model model) {
         // Get the username from the session
         String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
 
         // If the user is not logged in, redirect to login
         if (username == null) {
@@ -90,7 +92,13 @@ public class LifeBridgeController {
 
         // Add username to the model to display on the dashboard
         model.addAttribute("username", username);
+
+        if(role=="HOSPITAL"){
+            return "hdashboard";
+        }
+
         return "dashboard";
+
     }
 
     @GetMapping("/logout")
