@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
@@ -18,7 +17,6 @@ public class LifeBridgeBloodInventoryController {
     private LifeBridgeBloodInventoryRepository inventoryRepo;
 
     // List all blood inventory
-    @PreAuthorize("hasRole('ADMIN') or hasRole('BLOODBANK')")
     @GetMapping("/list")
     public String listInventory(HttpSession session,Model model) {
         String username = (String) session.getAttribute("username");

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LifeBridgeApplication<LifeBridge>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.makeskilled.LifeBridge.LifeBridgeApplication",
+            "projectName": "LifeBridge",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
