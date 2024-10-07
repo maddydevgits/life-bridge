@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpSession;
 
-import java.util.Optional;
-
-
 @Controller
 public class LifeBridgeController {
 
@@ -68,17 +65,17 @@ public class LifeBridgeController {
             return "register";
         }
 
-        Optional<LifeBridgeModel> user = repo.findByUsername(model.getUsername());
-        if (user.isPresent() && user.get().getPassword().equals(model.getPassword())) {
+        LifeBridgeModel user = repo.findByUsername(model.getUsername());
+        if (user != null && user.getPassword().equals(model.getPassword())) {
             // Store username in the session
-            session.setAttribute("username", user.get().getUsername());
-            session.setAttribute("role",user.get().getRole());
-            session.setAttribute("name",user.get().getName());
-            session.setAttribute("contact",user.get().getMobile());
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("role",user.getRole());
+            session.setAttribute("name",user.getName());
+            session.setAttribute("contact",user.getMobile());
 
-            form.addAttribute("message", "Login successful! Welcome " + user.get().getUsername());
+            form.addAttribute("message", "Login successful! Welcome " + user.getUsername());
 
-            if (user.get().getRole().equals("USER")){
+            if (user.getRole().equals("USER")){
                 return "redirect:/udashboard"; 
             } else  {
                 return "redirect:/dashboard";
@@ -126,4 +123,12 @@ public class LifeBridgeController {
         session.invalidate();  // Invalidate the session to log out the user
         return "redirect:/login";  // Redirect to the login page
     }
+
+    @GetMapping("/request_blood")
+    public String requestBloodPage(HttpSession session,Model m) {
+        String username = (String) session.getAttribute("username");
+        m.addAttribute("username",username);
+        return "request_blood";
+    }
+
 }

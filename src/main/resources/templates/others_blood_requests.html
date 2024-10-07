@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Requests from Others</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="jumbotron mt-5">
+            <h1 class="display-4">Welcome, <span th:text="${username}"></span>!</h1>
+            <p class="lead">This is your user dashboard for Life Bridge.</p>
+            <hr class="my-4">
+            <p>Select an option below to get started:</p>
+
+            <a class="btn btn-danger btn-lg" th:href="@{/udashboard}" role="button">Home</a>
+            <a class="btn btn-primary btn-lg" th:href="@{/inventory/ulist}" role="button">View Blood in Hospitals</a>
+            <a class="btn btn-success btn-lg" th:href="@{/request_blood}" role="button">Request Blood</a>
+            <a class="btn btn-warning btn-lg" th:href="@{/blood-requests/others}" role="button">Blood Requests</a>
+            <a class="btn btn-primary btn-lg" th:href="@{/blood-requests/myrequests}" role="button">My Requests</a>
+            <a class="btn btn-success btn-lg" th:href="@{/blood-requests/history}" role="button">History</a>
+            <a class="btn btn-danger btn-lg" th:href="@{/logout}" role="button">Logout</a>
+            
+        </div>
+        <h2>Blood Requests from Other Users</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Requester</th>
+                    <th>Blood Type</th>
+                    <th>Requested Quantity</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Accepted By</th>
+                    <th>Mobile Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${requests}">
+                    <td th:text="${request.username}"></td>
+                    <td th:text="${request.bloodType}"></td>
+                    <td th:text="${request.requestedQuantity}"></td>
+                    <td th:text="${#dates.format(request.requestDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${request.accepted ? 'Accepted' : 'Pending'}"></td>
+                    <td th:text="${request.acceptedBy != null ? request.acceptedBy : 'N/A'}"></td>
+                    <td th:text="${request.acceptedByMobile != null ? request.acceptedByMobile : 'N/A'}"></td>
+                    <td>
+                        <!-- Display accept button only if the request is still pending -->
+                        <form th:if="${!request.accepted}" th:action="@{/blood-requests/accept/{id}(id=${request.id})}" method="post">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                        </form>
+                        <span th:unless="${!request.accepted}">Request Closed</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
