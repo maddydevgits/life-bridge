@@ -1,0 +1,91 @@
+/* Global Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+    background-image: url('/images/blood-donation.jpg'); /* Add your hero image here */
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 1.25rem;
+}
+
+.hero .btn {
+    padding: 10px 25px;
+    font-size: 1.25rem;
+}
+
+/* Features Section */
+#features {
+    padding: 60px 0;
+}
+
+#features .card {
+    border: none;
+    transition: transform 0.3s;
+}
+
+#features .card:hover {
+    transform: translateY(-10px);
+}
+
+/* Donate Section */
+#donate {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+}
+
+#donate .btn {
+    padding: 12px 30px;
+}
+
+/* Request Section */
+#request {
+    padding: 60px 0;
+}
+
+#request .btn {
+    padding: 12px 30px;
+}
+
+/* Contact Section */
+#contact {
+    background-color: #343a40;
+    padding: 60px 0;
+}
+
+#contact i {
+    color: #ff4757;
+    font-size: 2.5rem;
+}
+
+#contact h5 {
+    font-size: 1.25rem;
+}
+
+/* Footer */
+footer {
+    background-color: #ff4757;
+    color: white;
+    padding: 15px 0;
+}
