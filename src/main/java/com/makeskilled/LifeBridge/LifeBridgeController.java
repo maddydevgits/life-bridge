@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class LifeBridgeController {
@@ -72,7 +74,12 @@ public class LifeBridgeController {
             session.setAttribute("role",user.get().getRole());
 
             form.addAttribute("message", "Login successful! Welcome " + user.get().getUsername());
-            return "redirect:/dashboard";  
+
+            if (user.get().getRole().equals("USER")){
+                return "redirect:/udashboard"; 
+            } else  {
+                return "redirect:/dashboard";
+            }
         } else {
             form.addAttribute("message", "Invalid username or password. Please try again.");
             return "login";  // Return to login page with an error message
@@ -83,7 +90,7 @@ public class LifeBridgeController {
     public String dashboard(HttpSession session, Model model) {
         // Get the username from the session
         String username = (String) session.getAttribute("username");
-        String role = (String) session.getAttribute("role");
+        
 
         // If the user is not logged in, redirect to login
         if (username == null) {
@@ -93,13 +100,23 @@ public class LifeBridgeController {
         // Add username to the model to display on the dashboard
         model.addAttribute("username", username);
 
-        if(role=="HOSPITAL"){
-            return "hdashboard";
+        return "dashboard";
+    }
+
+    @GetMapping("/udashboard")
+    public String udashboard(HttpSession session,Model model) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+
+        if(username==null){
+            return "redirect:/login";
         }
 
-        return "dashboard";
-
+        model.addAttribute("username",username);
+        model.addAttribute("role",role);
+        return "udashboard";
     }
+    
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {

@@ -39,4 +39,10 @@ Life Bridge:Integrated Blood Funds and Equipment Management System
         <td>7th Oct 2024</td>
         <td><ol><li>Madhu</li><li>Sudheer</li></ol></td>
     </tr>
+    <tr>
+        <td>6</td>
+        <td>Creating Navigation Bar for User Role</td>
+        <td>7th Oct 2024</td>
+        <td><ol><li>Madhu</li><li>Sudheer</li></ol></td>
+    </tr>
 </table>
