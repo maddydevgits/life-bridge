@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Requests</title>
+    <title>Accepted Requests History</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -23,28 +23,26 @@
             
             
         </div>
-        <h2>Blood Requests</h2>
+        <h2>Your Accepted Blood Requests</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Requester</th>
                     <th>Blood Type</th>
-                    <th>Quantity</th>
+                    <th>Requested Quantity</th>
                     <th>Request Date</th>
-                    <th>Action</th>
+                    <th>Accepted At</th>
+                    <th>Requested By</th>
+                    <th>Requested Mobile No</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="request : ${requests}">
-                    <td th:text="${request.username}"></td>
-                    <td th:text="${request.bloodType}"></td>
-                    <td th:text="${request.requestedQuantity}"></td>
-                    <td th:text="${#dates.format(request.requestDate, 'yyyy-MM-dd')}"></td>
-                    <td>
-                        <form th:action="@{/blood-requests/accept1/{id}(id=${request.id})}" method="post">
-                            <button type="submit" class="btn btn-success">Accept</button>
-                        </form>
-                    </td>
+                <tr th:each="history : ${history}">
+                    <td th:text="${history.bloodRequest.bloodType}"></td>
+                    <td th:text="${history.bloodRequest.requestedQuantity}"></td>
+                    <td th:text="${#dates.format(history.bloodRequest.requestDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#dates.format(history.acceptedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${history.bloodRequest.username}"></td>
+                    <td th:text="${history.bloodRequest.requester.mobile}"></td>
                 </tr>
             </tbody>
         </table>

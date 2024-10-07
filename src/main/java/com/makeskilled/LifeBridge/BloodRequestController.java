@@ -45,6 +45,7 @@ public class BloodRequestController {
         bloodRequestRepo.save(request);
         
         model.addAttribute("message", "Blood request successfully created.");
+        model.addAttribute("username", username);
         return "request_blood";  // Redirect to list of blood requests
     }
 
@@ -57,9 +58,11 @@ public class BloodRequestController {
     }
 
     @GetMapping("/list1")
-    public String listBloodRequests1(Model model) {
+    public String listBloodRequests1(HttpSession session,Model model) {
+        String username = (String) session.getAttribute("username");
         List<BloodRequestModel> requests = bloodRequestRepo.findByAcceptedFalse();
         model.addAttribute("requests", requests);
+        model.addAttribute("username", username);
         return "blood_requests_list";  // Corresponding Thymeleaf template for the list of requests
     }
 
@@ -71,14 +74,28 @@ public class BloodRequestController {
             model.addAttribute("error", "Blood request not found.");
             return "error";  // Error page
         }
-
+        
         String acceptedBy = (String) session.getAttribute("username");
+        LifeBridgeModel user = userRepo.findByUsername(acceptedBy);  // Assuming `findByUsername` method exists in UserRepository
+        String mobileNumber = user.getMobile();  // Assuming `mobileNumber` field exists in User entity
+
+       // Mark the request as accepted and store who accepted it along with the mobile number
         request.setAccepted(true);
         request.setAcceptedBy(acceptedBy);
-        bloodRequestRepo.save(request);
+        request.setAcceptedByMobile(mobileNumber);
+        bloodRequestRepo.save(request);  // Save the updated request
+
+        // Mark the request as accepted and store who accepted it
+        request.setAccepted(true);
+        request.setAcceptedBy(acceptedBy);
+        bloodRequestRepo.save(request);  // Save the updated request
+
+        // Save the request history
+        BloodRequestHistory history = new BloodRequestHistory(request, acceptedBy, mobileNumber, new Date());
+        bloodRequestHistoryRepo.save(history);  // Save history record
 
         model.addAttribute("success", "Blood request accepted by " + acceptedBy);
-        return "redirect:/blood-requests/list";  // Redirect to list of blood requests
+        return "redirect:/blood-requests/list1";  // Redirect to list of blood requests
     }
 
     @GetMapping("/myrequests")
@@ -147,5 +164,18 @@ public class BloodRequestController {
         model.addAttribute("username", acceptedBy);
 
         return "accepted_requests_history";  // Corresponding Thymeleaf template
+    }
+
+    @GetMapping("/history1")
+    public String viewAcceptedRequestsHistory1(HttpSession session, Model model) {
+        String acceptedBy = (String) session.getAttribute("username");
+
+        // Fetch the history of accepted requests for the current user
+        List<BloodRequestHistory> history = bloodRequestHistoryRepo.findByAcceptedBy(acceptedBy);
+
+        model.addAttribute("history", history);
+        model.addAttribute("username", acceptedBy);
+
+        return "accepted_requests_history1";  // Corresponding Thymeleaf template
     }
 }
