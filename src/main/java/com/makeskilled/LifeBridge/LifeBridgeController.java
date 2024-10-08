@@ -13,6 +13,10 @@ public class LifeBridgeController {
 
     @Autowired
     LifeBridgeRepository repo;
+
+    @Autowired
+    private EmailService emailService;
+
     
     @GetMapping("/")
     public String homePage() {
@@ -50,6 +54,10 @@ public class LifeBridgeController {
         }
 
         repo.save(model);
+        String subject = "Welcome to Life Bridge";
+        String body = "<div><b>Thank you for registering with Life Bridge.</b></div>";
+        String response = emailService.sendEmail(model.getEmail(), model.getName(), subject, body);
+        System.out.println(response);
         form.addAttribute("message", "Registration successful! You can now log in.");
         return "redirect:/login";
     }

@@ -23,6 +23,9 @@ public class BloodRequestController {
     @Autowired
     private BloodRequestHistoryRepository bloodRequestHistoryRepo;
 
+    @Autowired
+    private EmailService emailService;
+
 
     // Create a new blood request
     @PostMapping("/create")
@@ -43,6 +46,10 @@ public class BloodRequestController {
         request.setRequester(requester); 
     
         bloodRequestRepo.save(request);
+
+        String subject = "Blood Request Created";
+        String body = "<div><b>Your blood request for " + requestedQuantity + " units of " + bloodType + " has been successfully created.</b></div>";
+        emailService.sendEmail(requester.getEmail(), requester.getName(), subject, body);
         
         model.addAttribute("message", "Blood request successfully created.");
         model.addAttribute("username", username);
@@ -93,6 +100,16 @@ public class BloodRequestController {
         // Save the request history
         BloodRequestHistory history = new BloodRequestHistory(request, acceptedBy, mobileNumber, new Date());
         bloodRequestHistoryRepo.save(history);  // Save history record
+
+        // Send an email to the requester
+        String subjectRequester = "Your Blood Request Has Been Accepted";
+        String bodyRequester = "<div><b>Your blood request for " + request.getRequestedQuantity() + " units of " + request.getBloodType() + " has been accepted by " + acceptedBy + ".</b></div>";
+        emailService.sendEmail(request.getRequester().getEmail(), request.getRequester().getName(), subjectRequester, bodyRequester);
+
+        // Send an email to the user/hospital who accepted the request
+        String subjectAccepter = "You Have Accepted a Blood Request";
+        String bodyAccepter = "<div><b>You have successfully accepted the blood request for " + request.getRequestedQuantity() + " units of " + request.getBloodType() + ".</b></div>";
+        emailService.sendEmail(user.getEmail(), user.getName(), subjectAccepter, bodyAccepter);
 
         model.addAttribute("success", "Blood request accepted by " + acceptedBy);
         return "redirect:/blood-requests/list1";  // Redirect to list of blood requests
@@ -148,6 +165,16 @@ public class BloodRequestController {
         // Save the request history
         BloodRequestHistory history = new BloodRequestHistory(request, acceptedBy, mobileNumber, new Date());
         bloodRequestHistoryRepo.save(history);  // Save history record
+
+        // Send an email to the requester
+        String subjectRequester = "Your Blood Request Has Been Accepted";
+        String bodyRequester = "<div><b>Your blood request for " + request.getRequestedQuantity() + " units of " + request.getBloodType() + " has been accepted by " + acceptedBy + ".</b></div>";
+        emailService.sendEmail(request.getRequester().getEmail(), request.getRequester().getName(), subjectRequester, bodyRequester);
+
+        // Send an email to the user/hospital who accepted the request
+        String subjectAccepter = "You Have Accepted a Blood Request";
+        String bodyAccepter = "<div><b>You have successfully accepted the blood request for " + request.getRequestedQuantity() + " units of " + request.getBloodType() + ".</b></div>";
+        emailService.sendEmail(user.getEmail(), user.getName(), subjectAccepter, bodyAccepter);
 
         model.addAttribute("success", "Blood request accepted by " + acceptedBy);
         return "redirect:/blood-requests/others";  // Redirect back to the list of blood requests

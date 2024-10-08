@@ -16,6 +16,9 @@ public class BloodInventoryController {
     @Autowired
     private BloodInventoryRepository inventoryRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     // List all blood inventory
     @GetMapping("/list")
     public String listInventory(HttpSession session,Model model) {
@@ -53,13 +56,31 @@ public class BloodInventoryController {
         bloodInventory.setHospitalName(name);
         bloodInventory.setHospitalNo(contact);
         inventoryRepo.save(bloodInventory);
+
+        // Send an email notification about the new inventory
+        String subject = "New Blood Inventory Added";
+        String body = "<div><b>New blood inventory has been added by " + name + " (" + contact + ")</b><br>" +
+                    "Blood Type: " + bloodInventory.getBloodType() + "<br>" +
+                    "Available Units: " + bloodInventory.getQuantity() + "</div>";
+        emailService.sendEmail(contact, name, subject, body);  // Send the email
+
         return "redirect:/inventory/list";
     }
 
     // Delete blood inventory
     @GetMapping("/delete/{id}")
     public String deleteInventory(@PathVariable("id") Long id) {
-        inventoryRepo.deleteById(id);
+        BloodInventoryModel inventory = inventoryRepo.findById(id).orElse(null);
+        if (inventory != null) {
+            inventoryRepo.deleteById(id);
+
+            // Send an email notification about the deleted inventory
+            String subject = "Blood Inventory Deleted";
+            String body = "<div><b>The following blood inventory has been deleted:</b><br>" +
+                        "Blood Type: " + inventory.getBloodType() + "<br>" +
+                        "Deleted Units: " + inventory.getQuantity() + "</div>";
+            emailService.sendEmail(inventory.getHospitalNo(), inventory.getHospitalName(), subject, body);  // Send the email
+        }
         return "redirect:/inventory/list";
     }
 
@@ -77,6 +98,13 @@ public class BloodInventoryController {
     @PostMapping("/update")
     public String updateInventory(@ModelAttribute("bloodInventory") BloodInventoryModel bloodInventory) {
         inventoryRepo.save(bloodInventory);
+
+        // Send an email notification about the updated inventory
+        String subject = "Blood Inventory Updated";
+        String body = "<div><b>The blood inventory has been updated.</b><br>" +
+                    "Blood Type: " + bloodInventory.getBloodType() + "<br>" +
+                    "Updated Units: " + bloodInventory.getQuantity() + "</div>";
+        emailService.sendEmail(bloodInventory.getHospitalNo(), bloodInventory.getHospitalName(), subject, body);
         return "redirect:/inventory/list";
     }
 }

@@ -16,6 +16,9 @@ public class EquipmentInventoryController {
     @Autowired
     private EquipmentInventoryRepository equipmentRepo;
 
+    @Autowired
+    private EmailService emailService;
+
     // List all equipment inventory
     @GetMapping("/list")
     public String listEquipment(HttpSession session,Model model) {
@@ -39,13 +42,30 @@ public class EquipmentInventoryController {
     @PostMapping("/save")
     public String saveEquipment(@ModelAttribute("equipmentInventory") EquipmentInventoryModel equipmentInventory) {
         equipmentRepo.save(equipmentInventory);
+        // Send email notification about the new equipment
+        String subject = "New Equipment Added";
+        String body = "<div><b>New equipment has been added:</b><br>" +
+                    "Equipment Name: " + equipmentInventory.getEquipmentName() + "<br>" +
+                    "Purchase Date: " + equipmentInventory.getPurchaseDate() + "</div>";
+        emailService.sendEmail("recipient@example.com", "Admin", subject, body);  // Replace with actual recipient email
+
         return "redirect:/equipment/list";
     }
 
     // Delete equipment
     @GetMapping("/delete/{id}")
     public String deleteEquipment(@PathVariable("id") Long id) {
-        equipmentRepo.deleteById(id);
+        EquipmentInventoryModel equipment = equipmentRepo.findById(id).orElse(null);
+        if (equipment != null) {
+            equipmentRepo.deleteById(id);
+
+            // Send email notification about the deleted equipment
+            String subject = "Equipment Deleted";
+            String body = "<div><b>The following equipment has been deleted:</b><br>" +
+                        "Equipment Name: " + equipment.getEquipmentName() + "</div>";
+            emailService.sendEmail("recipient@example.com", "Admin", subject, body);  // Replace with actual recipient email
+        }
+
         return "redirect:/equipment/list";
     }
 
@@ -63,6 +83,12 @@ public class EquipmentInventoryController {
     @PostMapping("/update")
     public String updateEquipment(@ModelAttribute("equipmentInventory") EquipmentInventoryModel equipmentInventory) {
         equipmentRepo.save(equipmentInventory);
+        // Send email notification about the updated equipment
+        String subject = "Equipment Updated";
+        String body = "<div><b>The equipment has been updated:</b><br>" +
+                    "Equipment Name: " + equipmentInventory.getEquipmentName() + "<br>" +
+                    "Updated Purchase Date: " + equipmentInventory.getPurchaseDate() + "</div>";
+        emailService.sendEmail("recipient@example.com", "Admin", subject, body);  // Replace with actual recipient email
         return "redirect:/equipment/list";
     }
 }
